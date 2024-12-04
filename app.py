@@ -1,8 +1,7 @@
-from random import randint
+from random import randint, choice
 import re
-def roll_dice(dice_code):
 
-    dice_type_list = {
+dice_type_list = {
         'D3': 3,
         'D4': 4,
         'D6': 6,
@@ -13,28 +12,33 @@ def roll_dice(dice_code):
         'D100': 100
     }
 
-    pattern = r'^(\d*)D(\d+)([+-]\d+)?$'
+def roll_dice(dice_code):
+
+    pattern = r'^(D\d+)(,D\d+)*$'
     match = re.match(pattern, dice_code)
 
     if not match:
         return 'Invalid dice code'
 
+    dice_list = dice_code.split(',')
+    result = []
 
-    roll = int(match.group(1)) if match.group(1) else 1
-    dice_type = f'D{match.group(2)}'
-    mod = int(match.group(3)) if match.group(3) else 0
+    for dice in dice_list:
+        if dice not in dice_type_list:
+            return 'Invalid dice code'
 
-    if dice_type not in dice_type_list:
-        return 'Invalid dice type'
+        dice_max = dice_type_list[dice]
+        result.append(randint(1, dice_max))
 
-    dice_max = dice_type_list[dice_type]
-    result = [randint(1, dice_max) for _ in range(roll)]
-    total = sum(result) + mod
-
+    total = sum(result)
     return total
 
-def count_points(points):
-    roll = roll_dice('2D6')
+def count_points(points, dice_code):
+    roll = roll_dice(dice_code)
+    if isinstance(roll, str):
+        print(roll)
+        return points
+
     if roll == 7:
         points //= 7
     elif roll == 11:
@@ -43,24 +47,30 @@ def count_points(points):
         points += roll
     return points
 
+def get_random_dice():
+    random_dice = [choice(list(dice_type_list)) for _ in range(2)]
+    return ','.join(random_dice)
+
 def game_2001():
     player_points = 0
     computer_points = 0
 
-    input('press Enter to roll a dice')
-    player_points += roll_dice('2D6')
-    computer_points += roll_dice('2D6')
+    dice_code = input('Enter a dice')
 
-    while player_points < 2001 or computer_points < 2001:
-        print(f'punkty gracza {player_points}, punkty komputera {computer_points}')
-        player_points = count_points(player_points)
-        computer_points = count_points(computer_points)
-        input('press Enter to roll a dice')
 
-        if player_points > 2001:
-            return 'Brawo wygrałes'
-        elif computer_points > 2001:
-            return "komputer wygrał"
+    while True:
+        input('press enter to roll')
+        player_points = count_points(player_points, dice_code)
+        print(f'Your points is {player_points}')
+        computer_points = count_points(computer_points, get_random_dice())
+        print(f'Computer points is {computer_points}')
+
+        dice_code = input('Enter a dice')
+
+        if player_points >= 2001:
+            return 'You won'
+        elif computer_points >= 2001:
+            return "bot won"
         else:
             continue
 
