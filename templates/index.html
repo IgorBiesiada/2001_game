@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game 2001</title>
+</head>
+<body>
+    <h1>Welcome to Game 2001!</h1>
+
+    <form action="/roll" method="POST">
+        <label for="dice_code">Choose your first dice:</label>
+        <select name="dice_code" id="dice_code">
+            {% for dice, sides in dice_type_list.items() %}
+            <option value="{{ dice }}">{{ dice }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="points">Current points:</label>
+        <input type="number" name="points" id="points" value="{{ points or 0 }}">
+
+        <button type="submit">Roll Dice</button>
+    </form>
+
+    {% if roll_result is not none %}
+        <h2>Roll Result: {{ roll_result }}</h2>
+        <h3>Updated points: {{ points }}</h3>
+    {% endif %}
+</body>
+</html>

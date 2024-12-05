@@ -1,5 +1,8 @@
+from flask import Flask, render_template, request
 from random import randint, choice
 import re
+
+app = Flask(__name__)
 
 dice_type_list = {
         'D3': 3,
@@ -11,6 +14,20 @@ dice_type_list = {
         'D20': 20,
         'D100': 100
     }
+
+@app.route('/')
+def index():
+    return render_template('index.html', dice_type_list=dice_type_list)
+
+@app.route('/roll', methods=['POST'])    
+def roll():
+    dice_code = request.form.get('dice_code')
+    points = request.form.get('points', 0, type=int)
+    roll_result = roll_dice(dice_code)
+    update_points = count_points(points, dice_code)
+
+    return render_template('index.html', dice_type_list=dice_type_list, points=update_points, roll_result=roll_result)
+
 
 def roll_dice(dice_code):
 
@@ -51,27 +68,5 @@ def get_random_dice():
     random_dice = [choice(list(dice_type_list)) for _ in range(2)]
     return ','.join(random_dice)
 
-def game_2001():
-    player_points = 0
-    computer_points = 0
-
-    dice_code = input('Enter a dice')
-
-
-    while True:
-        input('press enter to roll')
-        player_points = count_points(player_points, dice_code)
-        print(f'Your points is {player_points}')
-        computer_points = count_points(computer_points, get_random_dice())
-        print(f'Computer points is {computer_points}')
-
-        dice_code = input('Enter a dice')
-
-        if player_points >= 2001:
-            return 'You won'
-        elif computer_points >= 2001:
-            return "bot won"
-        else:
-            continue
-
-print(game_2001())
+if __name__ == "__main__":
+    app.run(debug=True)
