@@ -9,13 +9,19 @@
     <h1>Welcome to Game 2001!</h1>
 
     <form action="/roll" method="POST">
-        <label for="dice_code">Choose your first dice:</label>
-        <select name="dice_code" id="dice_code">
+        <label for="dice1">Choose your first dice:</label>
+        <select name="dice1" id="dice_code">
             {% for dice, sides in dice_type_list.items() %}
             <option value="{{ dice }}">{{ dice }}</option>
             {% endfor %}
         </select>
-
+        <label for="dice2">Choose your second dice:</label>
+        <select name="dice2" id="dice_code2">
+            {% for dice, sides in dice_type_list.items() %}
+            <option value="{{ dice }}">{{ dice }}</option>
+            {% endfor %}
+        </select>
+        
         <label for="points">Current points:</label>
         <input type="number" name="points" id="points" value="{{ points or 0 }}">
 

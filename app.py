@@ -21,37 +21,32 @@ def index():
 
 @app.route('/roll', methods=['POST'])    
 def roll():
-    dice_code = request.form.get('dice_code')
+    dice1 = request.form.get('dice1')
+    dice2 = request.form.get('dice2')
     points = request.form.get('points', 0, type=int)
-    roll_result = roll_dice(dice_code)
-    update_points = count_points(points, dice_code)
+    roll_result = roll_dice(dice1, dice2)
+    update_points = count_points(points, dice1, dice2)
 
     return render_template('index.html', dice_type_list=dice_type_list, points=update_points, roll_result=roll_result)
 
 
-def roll_dice(dice_code):
+def roll_dice(dice1, dice2):
 
-    pattern = r'^(D\d+)(,D\d+)*$'
-    match = re.match(pattern, dice_code)
+    if dice1 not in dice_type_list or dice2 not in dice_type_list:
+        return 'Invalid dice type'
+    
+    
+    
+    dice1_max = dice_type_list[dice1]
+    dice2_max = dice_type_list[dice2]
 
-    if not match:
-        return 'Invalid dice code'
+    result1 = randint(1, dice1_max)
+    result2 = randint(2, dice2_max)
+    
+    return result1 + result2
 
-    dice_list = dice_code.split(',')
-    result = []
-
-    for dice in dice_list:
-        if dice not in dice_type_list:
-            return 'Invalid dice code'
-
-        dice_max = dice_type_list[dice]
-        result.append(randint(1, dice_max))
-
-    total = sum(result)
-    return total
-
-def count_points(points, dice_code):
-    roll = roll_dice(dice_code)
+def count_points(points, dice1, dice2):
+    roll = roll_dice(dice1, dice2)
     if isinstance(roll, str):
         print(roll)
         return points
