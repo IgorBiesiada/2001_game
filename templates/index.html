@@ -3,34 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game 2001</title>
+    <title>Dice Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .results {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333333;
+        }
+
+        .points {
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Game 2001!</h1>
+    <div class="container">
+        <h1>Dice Game</h1>
+        <form action="/roll" method="POST">
+            <label for="dice1">Choose your first dice:</label>
+            <select name="dice1" id="dice1" required>
+                <option value="" disabled selected>-- Select Dice --</option>
+                {% for dice, value in dice_type_list.items() %}
+                <option value="{{ dice }}">{{ dice }} (Max: {{ value }})</option>
+                {% endfor %}
+            </select>
 
-    <form action="/roll" method="POST">
-        <label for="dice1">Choose your first dice:</label>
-        <select name="dice1" id="dice_code">
-            {% for dice, sides in dice_type_list.items() %}
-            <option value="{{ dice }}">{{ dice }}</option>
-            {% endfor %}
-        </select>
-        <label for="dice2">Choose your second dice:</label>
-        <select name="dice2" id="dice_code2">
-            {% for dice, sides in dice_type_list.items() %}
-            <option value="{{ dice }}">{{ dice }}</option>
-            {% endfor %}
-        </select>
-        
-        <label for="points">Current points:</label>
-        <input type="number" name="points" id="points" value="{{ points or 0 }}">
+            <label for="dice2">Choose your second dice:</label>
+            <select name="dice2" id="dice2" required>
+                <option value="" disabled selected>-- Select Dice --</option>
+                {% for dice, value in dice_type_list.items() %}
+                <option value="{{ dice }}">{{ dice }} (Max: {{ value }})</option>
+                {% endfor %}
+            </select>
 
-        <button type="submit">Roll Dice</button>
-    </form>
+            <input type="hidden" name="player_points" value="{{ player_points|default(0) }}">
+            <input type="hidden" name="bot_points" value="{{ bot_points|default(0) }}">
 
-    {% if roll_result is not none %}
-        <h2>Roll Result: {{ roll_result }}</h2>
-        <h3>Updated points: {{ points }}</h3>
-    {% endif %}
+            <button type="submit">Roll the Dice</button>
+        </form>
+
+        {% if player_roll_result is not none and bot_roll_result is not none %}
+        <div class="results">
+            <p>You rolled: <span class="points">{{ player_roll_result }}</span></p>
+            <p>Bot rolled: <span class="points">{{ bot_roll_result }}</span></p>
+            <hr>
+            <p>Your total points: <span class="points">{{ player_points }}</span></p>
+            <p>Bot's total points: <span class="points">{{ bot_points }}</span></p>
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>
+
+

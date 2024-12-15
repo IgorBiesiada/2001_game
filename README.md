@@ -1,63 +1,107 @@
-# Dice Rolling Game - 2001
+# 2001 Game
 
-## Game Description
-
-"Dice Rolling Game - 2001" is a turn-based game where you compete against a computer to reach 2001 points first. The game allows you to customize the dice configuration for your rolls, while the computer randomly selects its dice for each turn.
-
-### Game Features:
-- Support for rolling multiple dice in a single turn.
-- Ability to specify your own dice configurations.
-- Automatic random dice selection for the computer.
+A simple web-based dice rolling game built with Flask. Compete against the bot, roll the dice, and collect points. May the luckiest win!
 
 ---
 
-## How to Play?
+## Features
 
-1. **Start the game**:  
-   Run the game script in your terminal.
+- **Dynamic Dice Selection**: Choose two dice for your rolls from a list of available dice types (e.g., D3, D6, D20, etc.).
+- **Score Tracking**: The game keeps track of points for both the player and the bot.
+- **Special Rules**: Unique multipliers for specific results (e.g., roll a `7` to divide your score by 7, or an `11` to multiply by 11).
+- **Responsive UI**: A sleek and user-friendly interface to enhance the game experience.
 
-2. **Enter dice configuration**:  
-   At the start of the game, specify the dice you want to use in the format `D<number>` (e.g., `D6,D10`).
+---
 
-3. **Roll the dice**:  
-   Press Enter to roll the dice and update your score.
+## How It Works
 
-4. **Check results**:  
-   After each roll, you will see both your score and the computer's score.
+1. Select two dice from the dropdown menus.
+2. Submit your choice to roll the dice.
+3. View your roll results, the bot's roll results, and updated scores.
+4. Repeat to accumulate points and outscore the bot!
 
-5. **Winning condition**:  
-   The first player to reach 2001 points wins.
+---
+
+## Installation and Setup
+
+### Prerequisites
+- Python 3.10 or higher
+- pip (Python package manager)
+
+### Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/2001-game.git
+   cd 2001-game
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install flask
+   ```
+
+3. Run the application:
+   ```bash
+   python app.py
+   ```
+
+4. Open your browser and navigate to:
+   ```
+   http://127.0.0.1:5000/
+   ```
+
+---
+
+## Code Structure
+
+```
+.
+├── app.py          # Main Flask application logic
+├── templates/
+│   └── index.html  # Frontend UI template
+└── static/         # (Optional) Static files (CSS, JS, Images)
+```
 
 ---
 
 ## Rules
 
-1. **Allowed dice types**:  
-   The game supports the following dice types:
-   - `D3, D4, D6, D8, D10, D12, D20, D100`
-   - You can roll one or multiple dice in the format `D<size>` or as a comma-separated list (e.g., `D6,D10`).
-
-2. **Scoring**:  
-   - If the sum of your rolls is `7`, your score is divided by `7`.  
-   - If the sum of your rolls is `11`, your score is multiplied by `11`.  
-   - Otherwise, the sum of your rolls is added to your score.
-
-3. **Computer's dice**:  
-   - The computer randomly selects two dice from the available types before each roll.
+1. **Dice Options**:
+   - Choose from dice with different maximum values, e.g., `D6` for 6-sided dice.
+2. **Scoring System**:
+   - Your total score is updated based on your dice roll.
+   - Special results:
+     - Roll `7`: Your score is divided by 7.
+     - Roll `11`: Your score is multiplied by 11.
+3. **Bot**:
+   - The bot rolls random dice and updates its score similarly.
 
 ---
 
-## Requirements
+## Customization
 
-- Python 3.x
-- `random` and `re` libraries (built-in with Python)
+To add more dice types, update the `dice_type_list` dictionary in `app.py`:
+
+```python
+    dice_type_list = {
+        'D3': 3,
+        'D4': 4,
+        'D6': 6,
+        'D8': 8,
+        'D10': 10,
+        'D12': 12,
+        'D20': 20,
+        'D100': 100
+    }
+```
+
+---
+## Contributing
+
+Contributions are welcome! Feel free to fork the repository, make changes, and submit a pull request.
 
 ---
 
-## How to Run?
+## License
 
-1. Clone or download the script to your local machine.  
-2. Open a terminal in the directory containing the script.  
-3. Run the script using the command:  
-   ```bash
-   python3 game_2001.py
+This project is licensed under the MIT License. See the `LICENSE` file for details.
